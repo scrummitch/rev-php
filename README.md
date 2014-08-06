@@ -5,9 +5,9 @@ Rev.com PHP API because they dont have one
 
 Rev.com is a transcription API service
 
-** Basic Usage: **
+*Basic Usage:*
 
- 1. Configure Rev with your access credentials
+ 1. Configure with your access credentials
     <code>
     <?php
       $rev = new Rev('APP_ID', 'API_KEY');
