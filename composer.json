@@ -1,0 +1,8 @@
+{
+  "name": "scrummitch/php-rev",
+  "description": "A cute little PHP version of the rev API",
+  "require": {
+    "php": ">=5.3.0",
+
+  }
+}
