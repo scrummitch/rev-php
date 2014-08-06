@@ -28,26 +28,35 @@ class Rev {
   /**
    * @var  string
    */
-  protected $_app_id;
+  protected $_client_key;
 
   /**
    * @var  string
    */
-  protected $_api_key;
+  protected $_user_key;
+
+  /**
+   * @var  string
+   */
+  protected $_version;
 
   /**
    * @var  string
    */
   protected $_base_url;
 
-  public function __construct($app_id, $api_key, $sandbox = FALSE)
+  public function __construct($client_key, $user_key, $version = 'v1', $sandbox = FALSE)
   {
-    $this->_app_id = $app_id;
-    $this->_api_key=  $api_key;
+    $this->_client_key = $client_key;
+    $this->_user_key=  $user_key;
+
+    $this->set_version($version);
 
     $this->_base_url = ($sandbox)
-      ? 'https://api-sandbox.rev.com/api/v1/'
-      : 'https://api.rev.com/api/v1/';
+      ? 'https://api-sandbox.rev.com/api/'.$this->_version.'/'
+      : 'https://api.rev.com/api/'.$this->_version.'/';
+
+    return $this;
   }
 
   /**
@@ -60,7 +69,6 @@ class Rev {
    */
   protected function _http($url, $method = 'GET', $post_data = NULL)
   {
-
     $headers = array('Content-Type: application/json');
 
     $ch = curl_init($this->_base_url.$url);
@@ -88,7 +96,7 @@ class Rev {
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($ch, CURLOPT_TIMEOUT, 60);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_USERPWD, $this->_app_id . ':' . $this->_api_key);
+    curl_setopt($ch, CURLOPT_USERPWD, 'Rev '.$this->_client_key . ':' . $this->_user_key);
 
     $response = curl_exec($ch);
 
@@ -184,5 +192,13 @@ class Rev {
   public function get_attachment_content($attachment_id)
   {
     $response = $this->_http('attachments/'.$attachment_id.'/content');
+  }
+
+  /**
+   *
+   */
+  public function set_version($version)
+  {
+    return $this->_version = $version;
   }
 }
