@@ -26,20 +26,28 @@
 class Rev {
 
   /**
-   * @var
+   * @var  string
    */
   protected $_app_id;
 
   /**
-   * @var
+   * @var  string
    */
   protected $_api_key;
 
+  /**
+   * @var  string
+   */
+  protected $_base_url;
 
-  public function __construct($app_id, $api_key)
+  public function __construct($app_id, $api_key, $sandbox = FALSE)
   {
     $this->_app_id = $app_id;
     $this->_api_key=  $api_key;
+
+    $this->_base_url = ($sandbox)
+      ? 'https://api-sandbox.rev.com/api/v1/'
+      : 'https://api.rev.com/api/v1/';
   }
 
   /**
@@ -55,7 +63,7 @@ class Rev {
 
     $headers = array('Content-Type: application/json');
 
-    $ch = curl_init($url);
+    $ch = curl_init($this->_base_url.$url);
 
     if ($method == 'POST')
     {
